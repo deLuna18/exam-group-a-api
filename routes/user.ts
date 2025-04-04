@@ -55,4 +55,33 @@ router.get('/:id', async (req: Request, res: Response) => {
     }
 });
 
+router.post('/', async (req: Request, res: Response) => {
+    try {           
+        const { name, email } = req.body;
+        if (!name || !email) {
+            return res.status(400).json({ message: 'Name and email are required' });
+        }
+
+        const newUser = {
+            id: users.length + 1,
+            name,
+            email
+        };
+        users.push(newUser);
+
+        return res.status(201).json({
+            success: true,
+            message: 'User created successfully',
+            user: newUser
+        });
+    } catch (error) {
+        console.error('Error creating user:', error);
+        return res.status(500).json({
+            success: false,
+            message: 'Failed to create user',
+            error: error.message
+        });
+    }
+});
+// #
 export default router;
