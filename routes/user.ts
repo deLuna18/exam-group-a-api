@@ -55,7 +55,6 @@ router.get('/:id', async (req: Request, res: Response) => {
     }
 });
 
-// CREATE USER 
 router.post('/', async (req: Request, res: Response) => {
     try {           
         const { name, email } = req.body;
@@ -84,5 +83,44 @@ router.post('/', async (req: Request, res: Response) => {
         });
     }
 });
-// #
+
+
+// UPDATE
+router.put('/:id', async (req: Request, res: Response) => {
+    try {   
+        const userId = Number(req.params.id);
+        if (isNaN(userId)) {
+            return res.status(400).json({ message: 'Invalid user ID' });
+        }
+
+        const { name, email } = req.body;
+        if (!name || !email) {
+            return res.status(400).json({ message: 'Name and email are required' });
+        }
+
+        const userIndex = users.findIndex(u => u.id === userId);
+        if (userIndex === -1) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        users[userIndex] = { id: userId, name, email };
+
+        return res.status(200).json({
+            success: true,
+            message: 'User updated successfully',
+            user: users[userIndex]
+        });
+    } catch (error) {
+        console.error('Error updating user:', error);   
+        return res.status(500).json({
+            success: false,
+            message: 'Failed to update user',
+            error: error.message
+        }); 
+    }
+});
+
+
+
+
 export default router;
