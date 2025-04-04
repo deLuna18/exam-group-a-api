@@ -55,6 +55,7 @@ router.get('/:id', async (req: Request, res: Response) => {
     }
 });
 
+// CREATE USER 
 router.post('/', async (req: Request, res: Response) => {
     try {           
         const { name, email } = req.body;
